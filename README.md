@@ -98,11 +98,19 @@ If all is working correctly, the Bot Emulator should show you a Web Chat experie
       > Storing sensitive values in appsettings is not recommend.  Follow [AspNet Configuration](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-9.0) for best practices.
 
 1. Run `dev tunnels`. Please follow [Create and host a dev tunnel](https://learn.microsoft.com/en-us/azure/developer/dev-tunnels/get-started?tabs=windows) and host the tunnel with anonymous user access command as shown below:
-   > NOTE: Go to your project directory and open the `./Properties/launchSettings.json` file. Check the port number and use that port number in the devtunnel command (instead of 3978).
+   > NOTE: Go to your project directory and open the 
+1. `./Properties/launchSettings.json` file. Check the port number and use that port number 
 
-   ```bash
-   devtunnel host -p 3978 --allow-anonymous
-   ```
+
+
+1.NGROK
+- install ngrok
+- ngrok config add-authtoken 2w1JAQooQg0kS6EWv4lPJbRrubU_3PH7FBUhbZ9XbXxgTwRxV
+- cd C:\ngrok
+- ngrok http 65455 
+
+- Bot framework cofig URL: https://onboardy.azurewebsites.net/api/messages
+- Bot framework cofig URL local: {NGROK URL}/api/messages
 
 1. On the Azure Bot, select **Settings**, then **Configuration**, and update the **Messaging endpoint** to `{tunnel-url}/api/messages`
 

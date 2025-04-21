@@ -79,15 +79,10 @@ builder.Services.AddSingleton<IStorage, MemoryStorage>();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapGet("/", () => "Microsoft Agents SDK Sample");
-    app.UseDeveloperExceptionPage();
-    app.MapControllers().AllowAnonymous();
-}
-else
-{
-    app.MapControllers();
-}
+app.MapGet("/", () => "Microsoft Agents SDK Sample");
+app.UseDeveloperExceptionPage();
+app.MapControllers().AllowAnonymous();
+
+//if (app.Environment.IsDevelopment()) { }
 app.Run();
 
