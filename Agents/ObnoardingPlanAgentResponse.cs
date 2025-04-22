@@ -1,12 +1,9 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Text.Json.Serialization;
 
-namespace WeatherAgent.Agents;
+namespace Obnoarding.Agents;
 
-public enum WeatherForecastAgentResponseContentType
+public enum ObnoardingPlanAgentResponseContentType
 {
     [JsonPropertyName("text")]
     Text,
@@ -15,11 +12,11 @@ public enum WeatherForecastAgentResponseContentType
     AdaptiveCard
 }
 
-public class WeatherForecastAgentResponse
+public class ObnoardingPlanAgentResponse
 {
     [JsonPropertyName("contentType")]
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public WeatherForecastAgentResponseContentType ContentType { get; set; }
+    public ObnoardingPlanAgentResponseContentType ContentType { get; set; }
 
     [JsonPropertyName("content")]
     [Description("The content of the response, may be plain text, or JSON based adaptive card but must be a string.")]

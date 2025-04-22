@@ -1,11 +1,8 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-using Microsoft.SemanticKernel;
+﻿using Microsoft.SemanticKernel;
 using System.ComponentModel;
 using System;
 
-namespace WeatherAgent.Plugins;
+namespace Obnoarding.Plugins;
 
 /// <summary>
 /// Semantic Kernel plugins for date and time.

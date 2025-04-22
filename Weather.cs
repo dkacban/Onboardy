@@ -1,19 +1,15 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-using Microsoft.Agents.Builder;
+﻿using Microsoft.Agents.Builder;
 using Microsoft.Agents.Builder.App;
 using Microsoft.Agents.Builder.State;
 using Microsoft.Agents.Core.Models;
 using Microsoft.SemanticKernel.ChatCompletion;
 using System.Threading;
 using System.Threading.Tasks;
-using WeatherAgent.Agents;
+using Obnoarding.Agents;
 
-namespace WeatherAgent;
+namespace Obnoarding;
 
-// This is the core handler for the Agent Message loop. Each new request will be processed by this class.
-public class Weather(AgentApplicationOptions options, WeatherForecastAgent weatherAgent) : AgentApplication(options)
+public class Onboarding(AgentApplicationOptions options, OnboardingPlanAgent agent) : AgentApplication(options)
 {
     [Route(RouteType = RouteType.Activity, Type = ActivityTypes.Message, Rank = RouteRank.Last)]
     protected async Task MessageActivityAsync(ITurnContext turnContext, ITurnState turnState, CancellationToken cancellationToken)
@@ -21,7 +17,7 @@ public class Weather(AgentApplicationOptions options, WeatherForecastAgent weath
         var chatHistory = turnState.GetValue("conversation.chatHistory", () => new ChatHistory());
 
         // Invoke the WeatherForecastAgent to process the message
-        var forecastResponse = await weatherAgent.InvokeAgentAsync(turnContext.Activity.Text, chatHistory);
+        var forecastResponse = await agent.InvokeAgentAsync(turnContext.Activity.Text, chatHistory);
         if (forecastResponse == null)
         {
             await turnContext.SendActivityAsync(MessageFactory.Text("Sorry, I couldn't get the weather forecast at the moment."), cancellationToken);
@@ -31,7 +27,7 @@ public class Weather(AgentApplicationOptions options, WeatherForecastAgent weath
         // Create a response message based on the response content type from the WeatherForecastAgent
         IActivity response = forecastResponse.ContentType switch
         {
-            WeatherForecastAgentResponseContentType.AdaptiveCard => MessageFactory.Attachment(new Attachment()
+            ObnoardingPlanAgentResponseContentType.AdaptiveCard => MessageFactory.Attachment(new Attachment()
             {
                 ContentType = "application/vnd.microsoft.card.adaptive",
                 Content = forecastResponse.Content,

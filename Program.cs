@@ -9,8 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Azure.Identity;
 using Microsoft.Agents.Hosting.AspNetCore;
 using Microsoft.Agents.Storage;
-using WeatherAgent.Agents;
-using WeatherAgent;
+using Obnoarding.Agents;
+using Obnoarding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,7 +60,7 @@ else
 }
 
 // Register the WeatherForecastAgent
-builder.Services.AddTransient<WeatherForecastAgent>();
+builder.Services.AddTransient<OnboardingPlanAgent>();
 
 // Add AspNet token validation
 //builder.Services.AddAgentAspNetAuthentication(builder.Configuration);
@@ -69,7 +69,7 @@ builder.Services.AddTransient<WeatherForecastAgent>();
 builder.AddAgentApplicationOptions();
 
 // Add the Agent
-builder.AddAgent<Weather>();
+builder.AddAgent<Onboarding>();
 
 // Register IStorage.  For development, MemoryStorage is suitable.
 // For production Agents, persisted storage should be used so
