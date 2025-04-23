@@ -1,6 +1,3 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +8,8 @@ using Microsoft.Agents.Hosting.AspNetCore;
 using Microsoft.Agents.Storage;
 using Obnoarding.Agents;
 using Obnoarding;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +20,6 @@ if (builder.Environment.IsDevelopment())
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
-
-// Register Semantic Kernel
 builder.Services.AddKernel();
 
 // Register the AI service of your choice. AzureOpenAI and OpenAI are demonstrated...
@@ -33,24 +30,6 @@ if (builder.Configuration.GetSection("AIServices").GetValue<bool>("UseAzureOpenA
     string apiKey = builder.Configuration.GetSection("AIServices:AzureOpenAI").GetValue<string>("ApiKey");
 
     builder.Services.AddAzureOpenAIChatCompletion(deploymentName, endpoint, apiKey);
-
-//    builder.Services.AddAzureOpenAIChatCompletion(deploymentName, endpoint, apiKey);
-
-
-    // Ensure the Azure.AI.OpenAI NuGet package is installed and referenced in your project.  
-    // You can install it using the following command in the terminal:  
-    // dotnet add package Azure.AI.OpenAI  
-
-    //builder.Services.AddAzureOpenAIChatCompletion(
-    //    deploymentName: builder.Configuration.GetSection("AIServices:AzureOpenAI").GetValue<string>("DeploymentName"),
-    //    endpoint: builder.Configuration.GetSection("AIServices:AzureOpenAI").GetValue<string>("Endpoint"),
-    //    apiKey: builder.Configuration.GetSection("AIServices:AzureOpenAI").GetValue<string>("ApiKey")),
-
-        //Use the Azure CLI (for local) or Managed Identity (for Azure running app) to authenticate to the Azure OpenAI service
-        //credentials: new ChainedTokenCredential(
-        //   new AzureCliCredential(),
-        //   new ManagedIdentityCredential()
-        //));
 }
 else
 {
@@ -59,30 +38,31 @@ else
         apiKey: builder.Configuration.GetSection("AIServices:OpenAI").GetValue<string>("ApiKey"));
 }
 
-// Register the WeatherForecastAgent
 builder.Services.AddTransient<OnboardingPlanAgent>();
 
 // Add AspNet token validation
 //builder.Services.AddAgentAspNetAuthentication(builder.Configuration);
 
-// Add AgentApplicationOptions from config.
 builder.AddAgentApplicationOptions();
 
-// Add the Agent
 builder.AddAgent<Onboarding>();
 
-// Register IStorage.  For development, MemoryStorage is suitable.
-// For production Agents, persisted storage should be used so
-// that state survives Agent restarts, and operate correctly
-// in a cluster of Agent instances.
 builder.Services.AddSingleton<IStorage, MemoryStorage>();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Microsoft Agents SDK Sample");
+app.MapGet("/", async (HttpContext context) =>
+{
+    var htmlContent = await File.ReadAllTextAsync("chat.html");
+    context.Response.ContentType = "text/html";
+    await context.Response.WriteAsync(htmlContent);
+});
+//app.MapGet("/", () => "Onboardy - your onboarding buddy - MS Teams & Microsoft Agents SDK & Semantic Kernel");
+// / should be mapped to a static html page
+
+
+//<iframe src='https://webchat.botframework.com/embed/onboardy2?s=YOUR_SECRET_HERE'  style='min-width: 400px; width: 100%; min-height: 500px;'></iframe>
 app.UseDeveloperExceptionPage();
 app.MapControllers().AllowAnonymous();
 
-//if (app.Environment.IsDevelopment()) { }
 app.Run();
-
