@@ -6,6 +6,7 @@ using Microsoft.SemanticKernel.ChatCompletion;
 using System.Threading;
 using System.Threading.Tasks;
 using Obnoarding.Agents;
+using OnboardyAgent;
 
 namespace Obnoarding;
 
@@ -26,6 +27,9 @@ public class Onboarding(AgentApplicationOptions options, OnboardingPlanAgent age
     [Route(RouteType = RouteType.Activity, Type = ActivityTypes.Message, Rank = RouteRank.Last)]
     protected async Task MessageActivityAsync(ITurnContext turnContext, ITurnState turnState, CancellationToken cancellationToken)
     {
+        var conversationReference = turnContext.Activity.GetConversationReference();
+        ConversationReferenceStorage.Save(conversationReference);
+
         var chatHistory = turnState.GetValue("conversation.chatHistory", () => new ChatHistory());
 
         var response = await agent.InvokeAgentAsync(turnContext.Activity.Text, chatHistory);
