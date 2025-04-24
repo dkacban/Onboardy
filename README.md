@@ -110,7 +110,7 @@ If all is working correctly, the Bot Emulator should show you a Web Chat experie
 - ngrok http 65455 
 
 - Bot framework cofig URL: https://onboardy.azurewebsites.net/api/messages
-- Bot framework cofig URL local: https://bffb-85-221-158-12.ngrok-free.app/api/messages
+- Bot framework cofig URL local: https://40e5-89-151-26-225.ngrok-free.app/api/messages
 - PUSH: http://localhost:65455/push
 
 1. On the Azure Bot, select **Settings**, then **Configuration**, and update the **Messaging endpoint** to `{tunnel-url}/api/messages`
@@ -121,3 +121,6 @@ If all is working correctly, the Bot Emulator should show you a Web Chat experie
 
 ## Further reading
 To learn more about building Bots and Agents, see our [Microsoft 365 Agents SDK](https://github.com/microsoft/agents) repo.
+
+## COSMOS: 
+https://portal.azure.com/#@darekkacbangmail.onmicrosoft.com/resource/subscriptions/82fa9ae6-516b-4cc4-ba16-29b13ee01662/resourceGroups/Onboardy/providers/Microsoft.DocumentDB/databaseAccounts/onboardy/dataExplorer
