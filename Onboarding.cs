@@ -7,10 +7,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Obnoarding.Agents;
 using OnboardyAgent;
+using Microsoft.Identity.Client.Extensions.Msal;
+using Microsoft.Agents.Storage;
+using System.Collections.Generic;
 
 namespace Obnoarding;
 
-public class Onboarding(AgentApplicationOptions options, OnboardingPlanAgent agent) : AgentApplication(options)
+public class Onboarding(AgentApplicationOptions options, OnboardingPlanAgent agent, IStorage storage) : AgentApplication(options)
 {
     [Route(RouteType = RouteType.Conversation, EventName = ConversationUpdateEvents.MembersAdded)]
     protected async Task WelcomeMessageAsync(ITurnContext turnContext, ITurnState turnState, CancellationToken cancellationToken)
@@ -27,8 +30,16 @@ public class Onboarding(AgentApplicationOptions options, OnboardingPlanAgent age
     [Route(RouteType = RouteType.Activity, Type = ActivityTypes.Message, Rank = RouteRank.Last)]
     protected async Task MessageActivityAsync(ITurnContext turnContext, ITurnState turnState, CancellationToken cancellationToken)
     {
+
+        var userId = turnContext.Activity.From.Id;
         var conversationReference = turnContext.Activity.GetConversationReference();
-        ConversationReferenceStorage.Save(conversationReference);
+
+        var data = new Dictionary<string, object>
+        {
+            { userId, conversationReference }
+        };
+
+        await storage.WriteAsync(data, cancellationToken);
 
         var chatHistory = turnState.GetValue("conversation.chatHistory", () => new ChatHistory());
 

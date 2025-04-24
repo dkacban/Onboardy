@@ -4,7 +4,7 @@ using System;
 
 namespace Obnoarding.Plugins;
 
-public class DateTimePlugin
+public class SchedulePlugin
 {
     [KernelFunction, Description("Get the current date")]
     public string Date(IFormatProvider formatProvider = null)
@@ -12,7 +12,7 @@ public class DateTimePlugin
         var date = DateTimeOffset.Now.ToString("D", formatProvider);
         return date;
     }
-        
+
     [KernelFunction, Description("Get the current date")]
     public string Today(IFormatProvider formatProvider = null) =>
         this.Date(formatProvider);

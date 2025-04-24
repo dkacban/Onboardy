@@ -111,6 +111,7 @@ If all is working correctly, the Bot Emulator should show you a Web Chat experie
 
 - Bot framework cofig URL: https://onboardy.azurewebsites.net/api/messages
 - Bot framework cofig URL local: https://bffb-85-221-158-12.ngrok-free.app/api/messages
+- PUSH: http://localhost:65455/push
 
 1. On the Azure Bot, select **Settings**, then **Configuration**, and update the **Messaging endpoint** to `{tunnel-url}/api/messages`
 

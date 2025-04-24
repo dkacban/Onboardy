@@ -6,23 +6,25 @@ using System.Threading.Tasks;
 using Microsoft.Agents.Builder;
 using Microsoft.Agents.Core.Models;
 using OnboardyAgent;
+using Microsoft.Agents.Storage;
 
 namespace Obnoarding;
 
 [Authorize]
 [ApiController]
 [Route("api/messages")]
-public class AgentIncomingController(IAgentHttpAdapter adapter, IAgent agent, IChannelAdapter channel) : ControllerBase
+public class AgentIncomingController(IAgentHttpAdapter adapter, IAgent agent, IChannelAdapter channel, IStorage storage) : ControllerBase
 {
     [HttpPost]
     public Task PostAsync(CancellationToken cancellationToken)
         => adapter.ProcessAsync(Request, Response, agent, cancellationToken);
 
     [Route("/push")]
-    [HttpGet]
-    public async Task<IActionResult> SendMessage([FromBody] string message, CancellationToken cancellationToken)
+    [HttpPost]
+    public async Task<IActionResult> SendMessage([FromBody] PushNotification notification, CancellationToken cancellationToken)
     {
-        var conversationReference = ConversationReferenceStorage.Get();
+        var data = await storage.ReadAsync<ConversationReference>([notification.UserId]);
+        var conversationReference = data[notification.UserId];
         if (conversationReference == null)
         {
             return BadRequest("No active conversation found.");
@@ -33,7 +35,7 @@ public class AgentIncomingController(IAgentHttpAdapter adapter, IAgent agent, IC
             reference: conversationReference,
             callback: async (turnContext, ct) =>
             {
-                await turnContext.SendActivityAsync(MessageFactory.Text(message), ct);
+                await turnContext.SendActivityAsync(MessageFactory.Text(notification.Message), ct);
             },
             cancellationToken: cancellationToken
         );

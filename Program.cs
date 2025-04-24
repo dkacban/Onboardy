@@ -10,6 +10,8 @@ using Obnoarding.Agents;
 using Obnoarding;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using OnboardyAgent;
+using Microsoft.Agents.Storage.CosmosDb;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,8 @@ else
         apiKey: builder.Configuration.GetSection("AIServices:OpenAI").GetValue<string>("ApiKey"));
 }
 
+
+
 builder.Services.AddTransient<OnboardingPlanAgent>();
 
 // Add AspNet token validation
@@ -47,7 +51,22 @@ builder.AddAgentApplicationOptions();
 
 builder.AddAgent<Onboarding>();
 
-builder.Services.AddSingleton<IStorage, MemoryStorage>();
+//builder.Services.AddSingleton<IStorage, MemoryStorage>();
+builder.Services.AddSingleton<IStorage>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+
+    var options = new CosmosDbPartitionedStorageOptions()
+    {
+        CosmosDbEndpoint = configuration.GetValue<string>("CosmosDB:Endpoint"),
+        AuthKey = configuration.GetValue<string>("CosmosDB:AuthKey"),
+        DatabaseId = configuration.GetValue<string>("CosmosDB:DatabaseId"),
+        ContainerId = configuration.GetValue<string>("CosmosDB:ContainerId")
+    };
+
+    return new CosmosDbPartitionedStorage(options);
+});
+
 
 var app = builder.Build();
 

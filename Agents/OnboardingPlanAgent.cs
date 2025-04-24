@@ -67,7 +67,7 @@ public class OnboardingPlanAgent
         await foreach (var response in _agent.InvokeAsync(chatHistory))
         {
             chatHistory.Add(response);
-            sb.Append(response.Content);    
+            sb.Append(response.Content);
         }
 
         try
