@@ -7,6 +7,9 @@ using System.Text;
 using System.Text.Json;
 using System;
 using Obnoarding.Plugins;
+using System.Collections.Generic;
+using Microsoft.Agents.Storage;
+using Microsoft.Identity.Client.Extensions.Msal;
 
 namespace Obnoarding.Agents;
 
@@ -15,6 +18,7 @@ public class OnboardingPlanAgent
     private readonly Kernel _kernel;
     private readonly ChatCompletionAgent _agent;
     private int retryCount;
+    private IStorage _storage;
 
     private const string AgentName = "ObnoardingPlanAgent";
     private const string AgentInstructions = """
@@ -22,21 +26,16 @@ public class OnboardingPlanAgent
         You may ask follow up questions until you have enough information to answer the employee question,
         but once you have a schedule, make sure to format it nicely using text.
 
-        Respond in JSON format with the following JSON schema:
-        
-        {
-            "contentType": "'Text',
-            "content": "{The content of the response - plain text}"
-        }
-
         Employee can belong only to 1 of 2 departments:
         - "it"
         - "finance"
+
         """;
 
-    public OnboardingPlanAgent(Kernel kernel)
+    public OnboardingPlanAgent(Kernel kernel, IStorage storage)
     {
         _kernel = kernel;
+        _storage = storage;
 
         _agent = new ChatCompletionAgent()
         {
@@ -47,18 +46,22 @@ public class OnboardingPlanAgent
                 new OpenAIPromptExecutionSettings() 
                 {
                     FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(), 
-                    ResponseFormat = "json_object" 
+                    ResponseFormat = "text" 
                 }
             )
         };
 
         _agent.Kernel.Plugins.Add(KernelPluginFactory.CreateFromType<DateTimePlugin>());
-        _agent.Kernel.Plugins.Add(KernelPluginFactory.CreateFromType<OnboardingSchedulePlugin>());
+        _agent.Kernel.Plugins.Add(KernelPluginFactory.CreateFromObject(new OnboardingSchedulePlugin(_storage)));
+
     }
 
-    public async Task<ObnoardingPlanAgentResponse> InvokeAgentAsync(string input, ChatHistory chatHistory)
+    public async Task<string> InvokeAgentAsync(string input, ChatHistory chatHistory, string userId)
     {
         ArgumentNullException.ThrowIfNull(chatHistory);
+
+        ChatMessageContent systemMessage = new(AuthorRole.System, $"userId is: {userId}");
+        chatHistory.Add(systemMessage);
 
         ChatMessageContent message = new(AuthorRole.User, input);
         chatHistory.Add(message);
@@ -70,23 +73,6 @@ public class OnboardingPlanAgent
             sb.Append(response.Content);
         }
 
-        try
-        {
-            var resultContent = sb.ToString();
-            var result = JsonSerializer.Deserialize<ObnoardingPlanAgentResponse>(resultContent);
-            retryCount = 0;
-            return result;
-        }
-        catch (JsonException je)
-        {
-            if (this.retryCount > 2)
-            {
-                throw;
-            }
-
-            this.retryCount++;
-
-            return await InvokeAgentAsync($"That response did not match the expected format. Please try again. Error: {je.Message}", chatHistory);
-        }
+        return sb.ToString();
     }
 }

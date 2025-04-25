@@ -3,14 +3,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.SemanticKernel;
 using Microsoft.Extensions.Configuration;
-using Azure.Identity;
 using Microsoft.Agents.Hosting.AspNetCore;
 using Microsoft.Agents.Storage;
 using Obnoarding.Agents;
 using Obnoarding;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using OnboardyAgent;
 using Microsoft.Agents.Storage.CosmosDb;
 
 var builder = WebApplication.CreateBuilder(args);

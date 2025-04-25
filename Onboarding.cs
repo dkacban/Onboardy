@@ -6,8 +6,6 @@ using Microsoft.SemanticKernel.ChatCompletion;
 using System.Threading;
 using System.Threading.Tasks;
 using Obnoarding.Agents;
-using OnboardyAgent;
-using Microsoft.Identity.Client.Extensions.Msal;
 using Microsoft.Agents.Storage;
 using System.Collections.Generic;
 
@@ -43,14 +41,14 @@ public class Onboarding(AgentApplicationOptions options, OnboardingPlanAgent age
 
         var chatHistory = turnState.GetValue("conversation.chatHistory", () => new ChatHistory());
 
-        var response = await agent.InvokeAgentAsync(turnContext.Activity.Text, chatHistory);
+        var response = await agent.InvokeAgentAsync(turnContext.Activity.Text, chatHistory, userId);
         if (response == null)
         {
             await turnContext.SendActivityAsync(MessageFactory.Text("Sorry, I couldn't answer your queston. Please, try again."), cancellationToken);
             return;
         }
 
-        IActivity ativityResponse = MessageFactory.Text(response.Content);
+        IActivity ativityResponse = MessageFactory.Text(response);
         await turnContext.SendActivityAsync(ativityResponse, cancellationToken);
     }
 }

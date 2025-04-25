@@ -2,6 +2,7 @@ namespace Obnoarding.Plugins;
 
 public class Meeting
 {
+    public string UserId { get; set; }
     public string Topic { get; set; }
     public string Agenda { get; set; }
     public string Organizer { get; set; }
