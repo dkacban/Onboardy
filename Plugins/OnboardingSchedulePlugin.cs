@@ -1,9 +1,6 @@
 ﻿using Microsoft.Agents.Storage;
-using Microsoft.Azure.Cosmos;
 using Microsoft.SemanticKernel;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Onboardy.Contracts;
 
 namespace Obnoarding.Plugins;
 
@@ -17,11 +14,11 @@ public class OnboardingSchedulePlugin
     }
 
     [KernelFunction]
-    public Task<List<Meeting>> GetSchedule(string date, string department, string userId)
+    public Task<List<MeetingDto>> GetSchedule(string date, string department, string userId)
     {
-        var it = new List<Meeting>()
+        var it = new List<MeetingDto>()
         {
-            new Meeting {
+            new MeetingDto {
                 UserId = userId,
                 Topic = "Introduction to company",
                 Agenda = "Overview of company policies and procedures",
@@ -29,9 +26,15 @@ public class OnboardingSchedulePlugin
                 Location = "online",
                 Date = date,
                 HourStart = "9:00",
-                HourEnd = "9:45"
+                HourEnd = "9:45",
+                Message = "Welcome to the company. We are happy that you joined us. Please read the following articles and let me know when you are ready to talk about the contents!",
+                Resources = new List<string>
+                {
+                    "https://www.wp.pl",
+                    "https://www.google.com"
+                }
             },
-            new Meeting {
+            new MeetingDto {
                 UserId = userId,
                 Topic = "SCRUM basics",
                 Agenda = "The framwork used in development teams, team structure, basics of scrum guide",
@@ -39,13 +42,18 @@ public class OnboardingSchedulePlugin
                 Location = "online",
                 Date = date,
                 HourStart = "10:00",
-                HourEnd = "11:30"
+                HourEnd = "11:30",
+                Message = "Let's talk about SCRUM - the way we work. Please read the document called SCRUM GUIDE and let me know when you are ready for a shord quiz.",
+                Resources = new List<string>
+                {
+                    "https://www.scrum.org/",
+                }
             }
         };
 
-        var finance = new List<Meeting>()
+        var finance = new List<MeetingDto>()
         {
-            new Meeting {
+            new MeetingDto {
                 UserId = userId,
                 Topic = "Introduction to company",
                 Agenda = "Overview of company policies and procedures",
@@ -53,9 +61,15 @@ public class OnboardingSchedulePlugin
                 Location = "online",
                 Date = date,
                 HourStart = "9:00",
-                HourEnd = "9:45"
+                HourEnd = "9:45",
+                Message = "Welcome to the company. We are happy that you joined us. Please read the following articles and let me know when you are ready to talk about the contents!",
+                Resources = new List<string>
+                {
+                    "https://wp.pl",
+                    "https://google.com"
+                }
             },
-            new Meeting {
+            new MeetingDto {
                 UserId = userId,
                 Topic = "Finance framework",
                 Agenda = "The framework used in the company, your responsibilities, common goal",
@@ -63,7 +77,13 @@ public class OnboardingSchedulePlugin
                 Location = "online",
                 Date = date,
                 HourStart = "10:00",
-                HourEnd = "11:30"
+                HourEnd = "11:30",
+                Message = "Time to talk about the accounting and finance procedures. We are happy that you joined us. Please read the following websites and let me know when you are ready to talk about the contents!",
+                Resources = new List<string>
+                {
+                    "https://finance.ec.europa.eu/digital-finance/framework-financial-data-access_en",
+                    "https://www.bdo.com/insights/assurance/accounting-for-business-combinations-asc-805"
+                }
             }
         };
 
@@ -77,11 +97,11 @@ public class OnboardingSchedulePlugin
         return Task.FromResult(schedule);
     }
 
-    public Task<string> SaveMeeting(Meeting meeting, string userId)
+    public Task<string> SaveMeeting(MeetingDto meeting, string userId)
     {
-        var meetingToSave = new Dictionary<string, Meeting>()
+        var meetingToSave = new Dictionary<string, MeetingDto>()
         {
-            { $"{userId}:{Guid.NewGuid()}", meeting}
+            { $"meeting:{userId}:{Guid.NewGuid()}", meeting}
         };
         _storage.WriteAsync(meetingToSave);
 

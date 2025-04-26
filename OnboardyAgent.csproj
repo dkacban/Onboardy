@@ -33,6 +33,9 @@
 		<PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.47.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="Onboardy.Models\Onboardy.Contracts.csproj" />
+	</ItemGroup>
 
 	<!--<ItemGroup>
 		<ProjectReference Include="libraries\Authentication\Authentication.Msal\Microsoft.Agents.Authentication.Msal.csproj" />
