@@ -1,15 +1,11 @@
 ﻿using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
-using System.Threading.Tasks;
 using Microsoft.SemanticKernel.ChatCompletion;
 using System.Text;
-using System.Text.Json;
-using System;
 using Obnoarding.Plugins;
-using System.Collections.Generic;
 using Microsoft.Agents.Storage;
-using Microsoft.Identity.Client.Extensions.Msal;
+using OnboardyAgent.Plugins;
 
 namespace Obnoarding.Agents;
 
@@ -53,7 +49,7 @@ public class OnboardingPlanAgent
 
         _agent.Kernel.Plugins.Add(KernelPluginFactory.CreateFromType<DateTimePlugin>());
         _agent.Kernel.Plugins.Add(KernelPluginFactory.CreateFromObject(new OnboardingSchedulePlugin(_storage)));
-
+        _agent.Kernel.Plugins.Add(KernelPluginFactory.CreateFromObject(new SmsPlugin()));
     }
 
     public async Task<string> InvokeAgentAsync(string input, ChatHistory chatHistory, string userId)

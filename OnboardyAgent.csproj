@@ -23,6 +23,7 @@
     <PackageReference Include="Microsoft.Agents.Storage" Version="1.0.1" />
     <PackageReference Include="Microsoft.Agents.Storage.CosmosDb" Version="1.0.1" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.49.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.IdentityModel.Validators" />
 	</ItemGroup>
 	<ItemGroup>	  
@@ -32,6 +33,7 @@
 		<PackageReference Include="Microsoft.SemanticKernel.Agents.OpenAI" Version="1.47.0-preview" />
 		<PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.47.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Twilio" Version="7.10.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="Onboardy.Models\Onboardy.Contracts.csproj" />

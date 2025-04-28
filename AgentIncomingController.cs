@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Agents.Hosting.AspNetCore;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Agents.Builder;
 using Microsoft.Agents.Core.Models;
 using Microsoft.Agents.Storage;
@@ -21,10 +19,10 @@ public class AgentIncomingController(IAgentHttpAdapter adapter, IAgent agent, IC
 
     [Route("/push")]
     [HttpPost]
-    public async Task<IActionResult> SendMessage([FromBody] MeetingDto meeting, CancellationToken cancellationToken)
+    public async Task<IActionResult> ProcessPushNotification([FromBody] NotificationDto notification, CancellationToken cancellationToken)
     {
-        var data = await storage.ReadAsync<ConversationReference>([meeting.UserId]);
-        var conversationReference = data[meeting.UserId];
+        var data = await storage.ReadAsync<ConversationReference>([notification.UserId]);
+        var conversationReference = data[notification.UserId];
         if (conversationReference == null)
         {
             return BadRequest("No active conversation found.");
@@ -35,7 +33,7 @@ public class AgentIncomingController(IAgentHttpAdapter adapter, IAgent agent, IC
             reference: conversationReference,
             callback: async (turnContext, ct) =>
             {
-                await turnContext.SendActivityAsync(MessageFactory.Text(meeting.Message), ct);
+                await turnContext.SendActivityAsync(MessageFactory.Text(notification.Text), ct);
             },
             cancellationToken: cancellationToken
         );

@@ -9,15 +9,10 @@ public class DateTimePlugin
     [KernelFunction, Description("Get the current date")]
     public string Date(IFormatProvider formatProvider = null)
     {
-        var date = DateTimeOffset.Now.ToString("D", formatProvider);
+        var date = DateTimeOffset.UtcNow.ToString("D", formatProvider);
         return date;
     }
         
     [KernelFunction, Description("Get the current date")]
-    public string Today(IFormatProvider formatProvider = null) =>
-        this.Date(formatProvider);
-
-    [KernelFunction, Description("Get the current date and time in the local time zone")]
-    public string Now(IFormatProvider formatProvider = null) =>
-        DateTimeOffset.Now.ToString("f", formatProvider);
+    public string Today(IFormatProvider formatProvider = null) =>Date(formatProvider);
 }

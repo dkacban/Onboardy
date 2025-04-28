@@ -107,11 +107,13 @@ If all is working correctly, the Bot Emulator should show you a Web Chat experie
 - install ngrok
 - ngrok config add-authtoken 2w1JAQooQg0kS6EWv4lPJbRrubU_3PH7FBUhbZ9XbXxgTwRxV
 - cd C:\ngrok
-- ngrok http 65455 
+- ngrok http 65455
 
 - Bot framework cofig URL: https://onboardy.azurewebsites.net/api/messages
 - Bot framework cofig URL local: https://40e5-89-151-26-225.ngrok-free.app/api/messages
-- PUSH: http://localhost:65455/push
+- PUSH: 
+    - local: http://localhost:65455/push
+    - dev: https://onboardy.azurewebsites.net/push
 
 1. On the Azure Bot, select **Settings**, then **Configuration**, and update the **Messaging endpoint** to `{tunnel-url}/api/messages`
 

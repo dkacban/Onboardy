@@ -5,7 +5,7 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardyAgent", "OnboardyAgent.csproj", "{BE3004D5-2EC5-41B6-B3EB-0EF3E7230C6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardy.Function", "..\Onboardy.Function\Onboardy.Function.csproj", "{3F768321-55A0-43C4-BE6C-5A4396A52464}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardy.Function", "Onboardy.Function\Onboardy.Function.csproj", "{3F768321-55A0-43C4-BE6C-5A4396A52464}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardy.Contracts", "Onboardy.Models\Onboardy.Contracts.csproj", "{EADC9F93-920F-47E8-B755-2ABDCFBF0D6A}"
 EndProject

@@ -1,3 +1,0 @@
-namespace Obnoarding.Plugins;
-
-
