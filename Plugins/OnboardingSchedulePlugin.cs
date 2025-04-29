@@ -46,7 +46,7 @@ public class OnboardingSchedulePlugin
                 [
                     new()
                     {
-                        Text = "Welcome to the company. I'm very happy that you joined us. Please read the following articles and let me know when you are ready to talk about the contents!",
+                        Text = $"Welcome to the company. I'm very happy that you joined us. Please read the following article: https://www.microsoft.com/en-us/about and then we can talk about the contents!",
                         Hour = now.AddMinutes(0).Hour,
                         Minute = now.AddMinutes(0).Minute
                     },
@@ -83,7 +83,7 @@ public class OnboardingSchedulePlugin
                 [
                     new()
                     {
-                        Text = "Let's talk about SCRUM - the way we work. Please read the document called SCRUM GUIDE and let me know when you are ready for a short quiz.",
+                        Text = "Let's talk about SCRUM - the way we work. Please read the document called SCRUM GUIDE that you can find on the website https://www.scrum.org/ and prepare for a short quiz",
                         Hour = now.AddMinutes(0).Hour,
                         Minute = now.AddMinutes(0).Minute
                     },

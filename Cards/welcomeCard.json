@@ -1,0 +1,19 @@
+﻿{
+  "type": "AdaptiveCard",
+  "version": "1.2",
+  "body": [
+    {
+      "type": "Image",
+      "url": "https://onboardystorage.blob.core.windows.net/knowledge/avatar.png",
+      "size": "Medium",
+      "style": "Person"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Hello! My name is Onboardy. I'm here to help with your onboarding process! I'll be sending you the tasks and do my best to answer your questions about our company.",
+      "wrap": true,
+      "weight": "Bolder",
+      "size": "Medium"
+    }
+  ]
+}

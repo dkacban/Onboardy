@@ -17,9 +17,19 @@
         header {
             background-color: #0078d4;
             color: white;
-            padding: 1rem;
+            padding: 2rem 1rem 1rem; /* Add extra padding at the top for the avatar */
             text-align: center;
+            position: relative;
         }
+
+            header img {
+                display: block;
+                margin: 0 auto; /* Center the image horizontally */
+                width: 120px; /* Make the image larger */
+                height: 120px;
+                border-radius: 50%; /* Make the image circular */
+                border: 4px solid white; /* Add a white border around the image */
+            }
 
         main {
             padding: 2rem;
@@ -29,7 +39,7 @@
         iframe {
             border: none;
             width: 600px;
-            max-width: 100%; /* Prevent the iframe from exceeding the viewport width */
+            max-width: 100%;
             height: 400px;
             max-height: 80%;
             margin-top: 2rem;
@@ -38,9 +48,9 @@
 </head>
 <body>
     <header>
-        <h1>Welcome to Onboardy</h1>
-        <p>Your onboarding buddy powered by MS Teams, Microsoft Agents SDK, Semantic Kernel, Azure Functions, Twilio and Azure AI Search</p>
-        <p>Your seamless onboarding journey starts now.</p>
+        <img src="https://onboardystorage.blob.core.windows.net/knowledge/avatar.png" alt="Onboardy Avatar">
+        <p>ONBOARDY is your onboarding buddy powered by MS Teams, Microsoft Agents SDK, Semantic Kernel, Azure Functions, Azure Storage, Twilio and Azure AI Search</p>
+        <p>Your new onboarding experience starts now.</p>
     </header>
     <main>
         <iframe src="https://webchat.botframework.com/embed/onboardy2?s=2ADMoTwf99GBEWB9CF6RQ1wq0ugoJxCjyZgXPBrdcXjb3y6zBNIeJQQJ99BDACHYHv6AArohAAABAZBS6Jko.1ALsXivYeQPFdHEeskORPX6CzN7xxXwy5Uk4WT9C7y0WkCNnKrvHJQQJ99BDACHYHv6AArohAAABAZBS4X3K"></iframe>

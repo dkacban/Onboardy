@@ -10,6 +10,7 @@ using Obnoarding;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.Agents.Storage.CosmosDb;
+using OnboardyAgent.Plugins;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,9 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddKernel();
 
-// Register the AI service of your choice. AzureOpenAI and OpenAI are demonstrated...
+
+builder.Services.Configure<AzureAISearchSettings>(builder.Configuration.GetSection("AzureAISearch"));
+
 if (builder.Configuration.GetSection("AIServices").GetValue<bool>("UseAzureOpenAI"))
 {
     string deploymentName = builder.Configuration.GetSection("AIServices:AzureOpenAI").GetValue<string>("DeploymentName");

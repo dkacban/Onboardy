@@ -3,11 +3,8 @@ using Microsoft.Agents.Builder.App;
 using Microsoft.Agents.Builder.State;
 using Microsoft.Agents.Core.Models;
 using Microsoft.SemanticKernel.ChatCompletion;
-using System.Threading;
-using System.Threading.Tasks;
 using Obnoarding.Agents;
 using Microsoft.Agents.Storage;
-using System.Collections.Generic;
 
 namespace Obnoarding;
 
@@ -20,7 +17,7 @@ public class Onboarding(AgentApplicationOptions options, OnboardingPlanAgent age
         {
             if (member.Id != turnContext.Activity.Recipient.Id)
             {
-                await turnContext.SendActivityAsync(MessageFactory.Text("Hello! My name is Onboardy. I'm here to help with your onboarding process! I'll be sending you the tasks and do my best to answer your questions about our company."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("Hello! My name is Onboardy. I'm here to help with your onboarding process! I'll be sending you the tasks and do my best to answer your questions about Microsoft."), cancellationToken);
             }
         }
     }

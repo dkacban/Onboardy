@@ -6,6 +6,7 @@ using System.Text;
 using Obnoarding.Plugins;
 using Microsoft.Agents.Storage;
 using OnboardyAgent.Plugins;
+using Microsoft.Extensions.Options;
 
 namespace Obnoarding.Agents;
 
@@ -18,17 +19,28 @@ public class OnboardingPlanAgent
 
     private const string AgentName = "ObnoardingPlanAgent";
     private const string AgentInstructions = """
-        You are a friendly assistant that helps new hires to get their obboarding plan.
+        You are a friendly assistant at Microsoft that helps new hires to get their obboarding plan.
         You may ask follow up questions until you have enough information to answer the employee question,
         but once you have a schedule, make sure to format it nicely using text.
+        You must keep your answers concise and extremely polite.
 
+
+        RULES:
         Employee can belong only to 1 of 2 departments:
         - "it"
         - "finance"
 
+        Whenever you answer user's question using your knowledge, you should provice clickable document path.
+        Whenever user asks for a knowledge, or documents, you must searh your knowledge.
+
+        When you create the schedule for employee, ask if they want to get SMS summary.
+
+        when user starts conversation, ask it for 3 things:
+        - phone number
+        - department
         """;
 
-    public OnboardingPlanAgent(Kernel kernel, IStorage storage)
+    public OnboardingPlanAgent(Kernel kernel, IStorage storage, IOptions<AzureAISearchSettings> aiSearchSettings)
     {
         _kernel = kernel;
         _storage = storage;
@@ -50,6 +62,7 @@ public class OnboardingPlanAgent
         _agent.Kernel.Plugins.Add(KernelPluginFactory.CreateFromType<DateTimePlugin>());
         _agent.Kernel.Plugins.Add(KernelPluginFactory.CreateFromObject(new OnboardingSchedulePlugin(_storage)));
         _agent.Kernel.Plugins.Add(KernelPluginFactory.CreateFromObject(new SmsPlugin()));
+        _agent.Kernel.Plugins.Add(KernelPluginFactory.CreateFromObject(new KnowledgePlugin(aiSearchSettings)));
     }
 
     public async Task<string> InvokeAgentAsync(string input, ChatHistory chatHistory, string userId)
